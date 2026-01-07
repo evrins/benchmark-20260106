@@ -46,16 +46,28 @@ build-axum:
 run-axum:
     ./ben-axum/target/release/ben-axum
 
-build-all: build-gin build-echo build-fiber build-quarkus build-spring-boot build-actix-web build-axum
+build-all: build-gin build-echo build-fiber build-std build-quarkus build-spring-boot build-actix-web build-axum build-fastapi build-express build-fastify
+
+run-bun:
+    cd ben-bun && bun run index.ts
 
 run-fastapi:
     cd ben-fastapi && uv run main.py
 
+build-fastapi:
+    cd ben-fastapi && uv sync
+
 run-express:
     cd ben-express && pnpm start
 
+build-express:
+    cd ben-express && pnpm i --force
+
 run-fastify:
     cd ben-fastify && pnpm start
+
+build-fastify:
+    cd ben-fastify && pnpm i --force
 
 run-benchmark:
     wrk -t2 -c40 -d15s http://localhost:8080/
