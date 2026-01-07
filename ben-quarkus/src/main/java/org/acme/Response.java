@@ -1,9 +1,11 @@
 package org.acme;
 
+import java.util.HashMap;
+
 public class Response {
     private String msg = "OK";
     private int code = 0;
-    private Object data = new Object();
+    private HashMap<String, Object> data = new HashMap<>();
 
     public String getMsg() {
         return msg;
