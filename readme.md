@@ -1,5 +1,20 @@
 # Benchmark 2026 0106
 
+## requirement
+    rust for actix-web axum
+    go for std echo gin fiber
+    nodejs & npm for express fastify
+    python & uv for fastapi
+    bun for bun
+    java maven gradle for spring boot quarkus
+    just tool to run recipes in justfile
+    wrk to run load test
+
+## steps to run test
+    1. run `just build-XXX` to build or install dependcies
+    2. run `just run-XXX` to run http server in specific language and framework
+    3. run `just run-benchmark` in another terminal to run test
+
 ## Result
 
 ### Macos
