@@ -11,9 +11,13 @@
     wrk to run load test
 
 ## steps to run test
-    1. run `just build-XXX` to build or install dependcies
+    1. run `just build-XXX` to build or install dependencies
     2. run `just run-XXX` to run http server in specific language and framework
     3. run `just run-benchmark` in another terminal to run test
+
+## run all benchmark and gen result chart image
+    1. run `just build-all` to build and install dependencies
+    2. run `cd tools && cargo run -r -- run-benchmarks` to generate results.png
 
 ## Result
 
@@ -60,3 +64,12 @@
     OpenJDK 64-Bit Server VM Temurin-25.0.1+8 (build 25.0.1+8-LTS, mixed mode, sharing)
 
 ![result](linux.png)
+
+## Automated Benchmarking
+
+We've added Rust-based automation tools to run benchmarks and generate charts automatically:
+
+- Navigate to the `tools/` directory
+- Use `cargo run -- run-benchmarks` to run all benchmarks automatically
+- Use `cargo run -- run-benchmark -f <framework>` to benchmark a specific framework
+- Results are saved to JSON files and charts are automatically generated
