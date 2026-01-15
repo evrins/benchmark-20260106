@@ -66,6 +66,11 @@ pub fn default_results() -> Vec<BenResult> {
         },
         BenResult {
             lang: "java".into(),
+            framework: "spring-boot-virtualthreads".into(),
+            ..BenResult::default()
+        },
+        BenResult {
+            lang: "java".into(),
             framework: "quarkus".into(),
             ..BenResult::default()
         },

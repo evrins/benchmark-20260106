@@ -153,6 +153,7 @@ fn run_all_benchmarks(output: &str, chart_output: &str, port: u16) {
         "actix-web",
         "axum",
         "spring-boot",
+        "spring-boot-virtualthreads",
         "quarkus",
         "express",
         "fastify",
@@ -206,7 +207,7 @@ fn run_single_benchmark(framework: &str, port: u16) {
 
 fn run_benchmark_for_framework(framework: &str, port: u16) -> Result<BenResult, String> {
     // Start the server in a separate thread
-    let server_cmd = format!("just run-{}", framework);
+    let server_cmd = format!("mise run-{}", framework);
     let (tx, rx) = channel::unbounded();
     let (stop_tx, stop_rx) = channel::unbounded();
     let server_tx = tx.clone();
@@ -214,16 +215,16 @@ fn run_benchmark_for_framework(framework: &str, port: u16) -> Result<BenResult, 
     let server_thread = thread::spawn(move || {
         #[cfg(unix)]
         use std::os::unix::process::CommandExt;
-        
+
         let mut cmd = std::process::Command::new("sh");
         cmd.arg("-c")
             .arg(&server_cmd)
             .stdout(process::Stdio::piped())
             .stderr(process::Stdio::piped());
-            
+
         #[cfg(unix)]
         cmd.process_group(0); // Create new process group on Unix
-        
+
         let mut child = cmd.spawn().expect("Failed to start server");
         let child_pid = child.id();
 
@@ -238,7 +239,7 @@ fn run_benchmark_for_framework(framework: &str, port: u16) -> Result<BenResult, 
             Ok(_) => {
                 // Stop signal received, kill the process group/tree
                 println!("Stopping server process for PID: {}", child_pid);
-                
+
                 #[cfg(unix)]
                 {
                     // Kill the entire process group to ensure all child processes are terminated
@@ -248,7 +249,7 @@ fn run_benchmark_for_framework(framework: &str, port: u16) -> Result<BenResult, 
                         libc::killpg(child_pid as i32, libc::SIGKILL);
                     }
                 }
-                
+
                 // Also kill the direct child process
                 if let Err(e) = child.kill() {
                     eprintln!("Failed to kill direct child process: {}", e);
@@ -258,7 +259,7 @@ fn run_benchmark_for_framework(framework: &str, port: u16) -> Result<BenResult, 
             }
             Err(err) => {
                 println!("Failed to stop server: {}", err);
-                
+
                 #[cfg(unix)]
                 {
                     // Try to kill the process group anyway
@@ -268,7 +269,7 @@ fn run_benchmark_for_framework(framework: &str, port: u16) -> Result<BenResult, 
                         libc::killpg(child_pid as i32, libc::SIGKILL);
                     }
                 }
-                
+
                 let _ = child.kill();
             }
         }
@@ -352,7 +353,7 @@ fn cleanup_port_processes(port: u16) {
     #[cfg(unix)]
     {
         let lsof_cmd = format!("lsof -ti:{}", port);
-        
+
         if let Ok(output) = Command::new("sh")
             .arg("-c")
             .arg(&lsof_cmd)
@@ -371,12 +372,12 @@ fn cleanup_port_processes(port: u16) {
             }
         }
     }
-    
+
     #[cfg(windows)]
     {
         // On Windows, use netstat and taskkill
         let netstat_cmd = format!("netstat -ano | findstr :{}", port);
-        
+
         if let Ok(output) = Command::new("cmd")
             .arg("/C")
             .arg(&netstat_cmd)

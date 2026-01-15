@@ -7,16 +7,16 @@
     python & uv for fastapi
     bun for bun
     java maven gradle for spring boot quarkus
-    just tool to run recipes in justfile
+    mise tool to run recipes in mise.tool
     wrk to run load test
 
 ## steps to run test
-    1. run `just build-XXX` to build or install dependencies
-    2. run `just run-XXX` to run http server in specific language and framework
-    3. run `just run-benchmark` in another terminal to run test
+    1. run `mise build-XXX` to build or install dependencies
+    2. run `mise run-XXX` to run http server in specific language and framework
+    3. run `mise run-benchmark` in another terminal to run test
 
 ## run all benchmark and gen result chart image
-    1. run `just build-all` to build and install dependencies
+    1. run `mise build-all` to build and install dependencies
     2. run `cd tools && cargo run -r -- run-benchmarks` to generate results.png
 
 ## Result

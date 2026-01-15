@@ -43,6 +43,6 @@ cargo run -- run-benchmark -f gin --port 8080
 
 This tool requires:
 - Rust (1.92.0 or higher)
-- The `just` command runner
+- The `mise` command runner
 - `wrk` for HTTP benchmarking
 - All the framework-specific dependencies mentioned in the main README
